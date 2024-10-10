@@ -26,14 +26,12 @@ jobs:
 
       - name: Test
         run: echo "Test project"      
-
-  build:
+  publish:
+    needs: [test]
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
-
-      - name: Build
-        run: echo "Build project" 
 
       - name: setup .net
         uses: actions/setup-dotnet@v3
@@ -45,24 +43,6 @@ jobs:
 
       - name: Build
         run: dotnet build ./WebAppDeploy.sln --configuration Release --no-restore
-
-  publish:
-    needs: [test, build]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: setup .net
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0
-
-      # - name: Restore
-      #   run: dotnet restore ./WebAppDeploy.sln
-
-      # - name: Build
-      #   run: dotnet build ./WebAppDeploy.sln --configuration Release --no-restore
 
       - name: Publish
         run: dotnet publish ./WebAppDeploy.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATCH }}'
