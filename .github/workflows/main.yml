@@ -7,7 +7,7 @@ on:
       - master
 
 env:
-  AZURE_WEBAPP_NAME: TesteCICD
+  AZURE_WEBAPP_NAME: deploy-teste-ci-cd
   AZURE_WEBAPP_PACKAGE_PATCH: "./publish"
 
 jobs:
