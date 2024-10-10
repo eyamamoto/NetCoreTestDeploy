@@ -7,6 +7,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpsRedirection(opt => opt.HttpsPort = 443);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
