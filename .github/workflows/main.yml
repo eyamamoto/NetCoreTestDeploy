@@ -20,14 +20,41 @@ jobs:
         run: echo "Lint project"
   
   test:
+    needs: [lint]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
+      - name: setup .net
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0
+
+      - name: Run Integration Tests
+        run: dotnet test --filter Category=Integration --no-restore --verbosity normal     
+
+  build:
+    needs: [lint,test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: setup .net
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0
+
       - name: Test
         run: echo "Test project"      
+
+      - name: Restore
+        run: dotnet restore ./WebAppDeploy.sln
+
+      - name: Build
+        run: dotnet build ./WebAppDeploy.sln --configuration Release --no-restore
+
   publish:
-    needs: [test]
+    needs: [build, lint, test]
     runs-on: ubuntu-latest
 
     steps:
